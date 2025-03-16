@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 상세보기</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .container {
+            max-width: 800px;
+        }
+        .content-box {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">게시글 상세보기</h2>
+
+    <div class="content-box">
+        <h3 th:text="${boardDTO.title}"></h3>
+        <p class="text-muted">작성자: <span th:text="${boardDTO.writer}"></span></p>
+        <hr>
+        <p th:text="${boardDTO.content}"></p>
+    </div>
+
+    <div class="mt-4 d-flex justify-content-between">
+        <a href="/boardlist" class="btn btn-secondary">목록으로</a>
+        <a th:href="@{/boardedit/{bno}(bno=${boardDTO.bno})}" class="btn btn-primary">수정</a>
+    </div>
+</div>
+</body>
+</html>
