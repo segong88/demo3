@@ -9,11 +9,22 @@
         .table th, .table td {
             text-align: center;
             vertical-align: middle;
+            padding: 8px;
         }
-        .col-id { width: 10%; }
-        .col-title { width: 50%; text-align: left; }
-        .col-author { width: 20%; }
-        .col-date { width: 20%; }
+        .col-bno { width: 10%; }
+        .col-title { width: 40%; text-align: left; }
+        .col-writer { width: 15%; }
+        .col-regidate { width: 12%; }
+        .col-modidate { width: 12%; }
+
+        .table td {
+            min-height: 50px; /* 적절한 값으로 조정 */
+        }
+
+        /* 테이블 고정 레이아웃 */
+        table {
+            table-layout: fixed;
+        }
     </style>
 </head>
 <body>
@@ -29,26 +40,27 @@
             <th>제목</th>
             <th>작성자</th>
             <th>등록일</th>
+            <th>수정일</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="board : ${boardDTOS}" class="text-center">
-            <td><a th:href="@{/boarddetail/{bno}(bno = ${board.bno})}" th:text="${board.bno}"></a></td>     <!-- 상세보기 페이지로 못넘어가고 오류가 나네요,, ㅠ -->
+            <td><a th:href="@{/board/{bno}(bno = ${board.bno})}" th:text="${board.bno}"></a></td>
             <td class="text-start">
-                <a th:href="@{/boarddetail/{bno}(bno=${board.bno})}" th:text="${board.title}" class="text-decoration-none"></a>
+                <a th:href="@{/board/{bno}(bno=${board.bno})}" th:text="${board.title}" class="text-decoration-none"></a>
             </td>
             <td th:text="${board.writer}"></td>
-            <td th:text="${#temporals.format(board.localDateTime, 'yyyy-MM-dd hh:mm')}"></td>
+            <td th:text="${board.createDate != null ? #temporals.format(board.createDate, 'yyyy-MM-dd HH:mm') : '-'}"></td>
+            <td th:text="${board.modifiedDate != null ? #temporals.format(board.modifiedDate, 'yyyy-MM-dd HH:mm') : '-'}"></td>
         </tr>
         </tbody>
     </table>
-    <!-- 페이지네이션 -->     <!-- 1페이지랑 2페이지랑 레이아웃 왜 달라질까요? 등록일 값이 있고없고 문제인가요? -->
+
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${boardDTOS.first} ? 'disabled'">
                 <a class="page-link" th:href="@{/boardlist(page=${boardDTOS.number - 1})}">이전</a>
             </li>
-            <!-- 숫자 버튼 (1~10까지만 표시) -->
             <th:block th:with="start=${(boardDTOS.number / 10) * 10}, end=${T(java.lang.Math).min(start + 9, boardDTOS.totalPages - 1)}">
                 <li class="page-item" th:each="i : ${#numbers.sequence(start, end)}"
                     th:classappend="${i == boardDTOS.number} ? 'active'">

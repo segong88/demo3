@@ -5,6 +5,7 @@ import com.example.demo.entity.Board;
 import com.example.demo.repository.BoardRepository;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository;
@@ -22,6 +24,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public Page<BoardDTO> getList(Pageable pageable) {
+        log.info("들어온 값 : " + pageable);
 
         Page<Board> boards = boardRepository.findAll(pageable);
 
@@ -31,6 +34,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public BoardDTO boardDetail(Long bno) {
+        log.info("들어온 값 : " + bno);
 
         Board board = boardRepository.findById(bno).orElseThrow();
 
@@ -39,9 +43,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public void boardRegister(BoardDTO boardDTO) {
-
-        //등록하면 자동으로 현재 시간 값 들어감
-        boardDTO.setLocalDateTime(LocalDateTime.now());
+        log.info("들어온 값 : " + boardDTO);
 
         //DTO를 받아서 entity로 변환
         Board board = modelMapper.map(boardDTO, Board.class);
@@ -50,14 +52,26 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public void boardUpdate(BoardDTO boardDTO) {
+        log.info("들어온 값 : " + boardDTO);
 
-        Board board = modelMapper.map(boardDTO, Board.class);
+        //기존 데이터 가져오기 (pk로)
+        Board board = boardRepository.findById(boardDTO.getBno())
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+        //IllegalArgumentException : 잘못된 값이나 형식의 인수가 메서드에 전달될 때 발생
+
+
+        //기존 데이터에 새로운 값 적용
+        board.setTitle(boardDTO.getTitle());
+        board.setContent(boardDTO.getContent());
+        board.setModifiedDate(LocalDateTime.now());     //수정 시간 업데이트
+
+        //저장
         boardRepository.save(board);
-
-    }   //등록과 수정은 똑같군요,, ~
+    }
 
     @Override
     public void boardDelete(Long bno) {
+        log.info("들어온 값 : " + bno);
 
         boardRepository.deleteById(bno);
 

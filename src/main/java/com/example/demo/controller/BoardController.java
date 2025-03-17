@@ -12,10 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -64,7 +61,7 @@ public class BoardController {
     public String edit(@PathVariable("bno") Long bno, Model model){
 
         BoardDTO boardDTO = boardService.boardDetail(bno);
-        model.addAttribute("boardEdit", boardDTO);
+        model.addAttribute("boardDTO", boardDTO);
 
         return "/boardedit";
     }
@@ -76,6 +73,16 @@ public class BoardController {
         Long bno = boardDTO.getBno();
 
         return "redirect:/board/" + bno;
+    }
+
+    @GetMapping("/boarddelete/{bno}")
+    public String delete(@PathVariable("bno") Long bno) {
+
+        if(bno != null) {   //bno가 null이 아니라면, 값이 있다면
+            boardService.boardDelete(bno);  //삭제
+        }
+
+        return  "redirect:/boardlist";
     }
 
 

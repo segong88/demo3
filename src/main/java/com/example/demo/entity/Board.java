@@ -26,6 +26,20 @@ public class Board {
 
     private String writer;
 
-    private LocalDateTime localDateTime;
+    @Column(updatable = false)
+    private LocalDateTime createDate;
+    private LocalDateTime modifiedDate;
+
+    @PrePersist //엔티티가 처음 저장될 때 실행
+    public void proPersist(){
+        this.createDate = LocalDateTime.now();
+        this.modifiedDate = this.createDate;
+
+    }
+
+    @PreUpdate  //엔티티가 수정될 때 실행
+    public void preUpdate(){
+        this.modifiedDate = LocalDateTime.now();
+    }
 
 }

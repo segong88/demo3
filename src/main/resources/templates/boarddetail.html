@@ -31,7 +31,16 @@
     <div class="mt-4 d-flex justify-content-between">
         <a href="/boardlist" class="btn btn-secondary">목록으로</a>
         <a th:href="@{/boardedit/{bno}(bno=${boardDTO.bno})}" class="btn btn-primary">수정</a>
+        <button type="button" class="btn btn-danger" onclick="deletePost()">삭제</button>
     </div>
 </div>
+
+<script>
+    function deletePost() {
+        if(confirm("정말 삭제하시겠습니까?")) {
+            location.href = "/boarddelete/" + [[${boardDTO.bno}]];
+        }
+    }
+</script>
 </body>
 </html>

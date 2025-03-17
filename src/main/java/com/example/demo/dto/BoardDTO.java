@@ -21,6 +21,7 @@ public class BoardDTO {
 
     private String writer;
 
-    private LocalDateTime localDateTime;
+    private LocalDateTime createDate;
+    private LocalDateTime modifiedDate;
 
 }
