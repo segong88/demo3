@@ -30,7 +30,7 @@ public class BoardController {
         //뷰에 보여줘야지. 뷰(html)에서 boardDTOS 라는 이름을 쓸거야
         model.addAttribute("boardDTOS", boardDTOS);
 
-        return "/boardlist";
+        return "boardlist";
     }
 
     @GetMapping("/board/{bno}")
@@ -39,14 +39,14 @@ public class BoardController {
         BoardDTO boardDTO = boardService.boardDetail(bno);
         model.addAttribute("boardDTO", boardDTO);
 
-        return "/boarddetail";
+        return "boarddetail";
     }
 
 
     @GetMapping("/register")
     public String register() {
 
-        return "/register";
+        return "register";
     }
 
     @PostMapping("/register")
@@ -63,7 +63,7 @@ public class BoardController {
         BoardDTO boardDTO = boardService.boardDetail(bno);
         model.addAttribute("boardDTO", boardDTO);
 
-        return "/boardedit";
+        return "boardedit";
     }
 
     @PostMapping("/boardedit")
